@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 
-export class OrderPage {
+export default class OrderPage {
   private page: Page
   readonly statusButton: Locator
   readonly nameInput: Locator
@@ -24,7 +24,9 @@ export class OrderPage {
   }
 
   public async clickButton(button: string): Promise<void> {
-    if(button==='orderStatusPopUpClose') await this.page.getByTestId('searchOrder-popup-close-button').click({ force: true })
-    if(button==='statusButton') await this.statusButton.click({ force: true })
+    if(button==='orderStatusPopUp') await this.page.getByTestId('searchOrder-popup-close-button').click({ force: true })
+    if(button==='status') await this.statusButton.click({ force: true })
+    if(button==='createOrder') await this.createOrderButton.click()
+    if(button==='logOut') await this.logOutButton.click()
   }
 }
