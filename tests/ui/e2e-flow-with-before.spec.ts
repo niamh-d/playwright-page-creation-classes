@@ -1,31 +1,59 @@
 import { test, expect } from '@playwright/test'
-import { LoginPage } from '../pages/login-page'
+import LoginPage from '../pages/login-page'
+import OrderPage from '../pages/order-page'
 import { faker } from '@faker-js/faker/locale/ar'
 import { PASSWORD, USERNAME } from '../../config/env-data'
 
-let authPage: LoginPage
+test.describe('Login and Order Creation pages', () => {
+  let authPage: LoginPage
 
-test.beforeEach(async ({ page }) => {
-  authPage = new LoginPage(page)
-  await authPage.open()
-})
+  test.beforeEach(async ({ page }) => {
+    authPage = new LoginPage(page)
+    await authPage.open()
+  })
 
-test('signIn button disabled when incorrect data inserted', async ({}) => {
-  await authPage.usernameField.fill(faker.lorem.word(2))
-  await authPage.passwordField.fill(faker.lorem.word(7))
-  await expect(authPage.signInButton).toBeDisabled()
-})
+  test.describe('Log in tests', () => {
+    test('signIn button disabled when incorrect data inserted', async ({}) => {
+      await authPage.usernameField.fill(faker.lorem.word(2))
+      await authPage.passwordField.fill(faker.lorem.word(7))
+      await expect.soft(authPage.signInButton).toBeDisabled()
+    })
 
-test('error message displayed when incorrect credentials used', async ({}) => {
-  // implement test
-})
+    test('error message displayed when incorrect credentials used', async ({}) => {
+      await authPage.usernameField.fill(faker.lorem.word(2))
+      await authPage.passwordField.fill(faker.lorem.word(8))
+      await authPage.signInButton.click()
+      await expect.soft(authPage.authErrorMessage).toBeVisible()
+    })
+  })
 
-test('login with correct credentials and verify order creation page', async ({}) => {
-  const orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
-  await expect(orderCreationPage.statusButton).toBeVisible()
-  // verify at least few elements on the order creation page
-})
+  test.describe('Order creation tests', () => {
+    let orderCreationPage: OrderPage
 
-test('login and create order', async ({}) => {
-  // implement test
+    test.beforeEach(async () => {
+      orderCreationPage = await authPage.signIn(USERNAME, PASSWORD)
+    })
+
+    test('login with correct credentials and verify order creation page', async ({}) => {
+      await expect.soft(orderCreationPage.statusButton).toBeVisible()
+      await expect.soft(orderCreationPage.nameInput).toBeVisible()
+      await expect.soft(orderCreationPage.phoneInput).toBeVisible()
+      await expect.soft(orderCreationPage.commentInput).toBeVisible()
+      await expect.soft(orderCreationPage.createOrderButton).toBeVisible()
+    })
+
+    test('login and create order', async ({}) => {
+      await orderCreationPage.nameInput.fill(faker.lorem.word(6))
+      await orderCreationPage.phoneInput.fill(faker.lorem.word(6))
+      await orderCreationPage.commentInput.fill(faker.lorem.word(20))
+      await orderCreationPage.clickButton('createOrder')
+      await expect.soft(orderCreationPage.orderCreationContainer).toBeVisible()
+      await expect.soft(orderCreationPage.okPopUpButton).toBeVisible()
+    })
+
+    test('login and log out', async ({}) => {
+      await orderCreationPage.clickButton('logOut')
+      await expect.soft(authPage.signInButton).toBeEnabled()
+    })
+  })
 })
