@@ -14,7 +14,7 @@ export default class OrderPage {
   constructor(page: Page) {
     this.page = page
     this.statusButton = this.page.getByTestId('openStatusPopup-button')
-    this.nameInput= this.page.getByTestId('username-input')
+    this.nameInput = this.page.getByTestId('username-input')
     this.commentInput = this.page.getByTestId('comment-input')
     this.phoneInput = this.page.getByTestId('phone-input')
     this.createOrderButton = this.page.getByTestId('createOrder-button')
@@ -24,9 +24,10 @@ export default class OrderPage {
   }
 
   public async clickButton(button: string): Promise<void> {
-    if(button==='orderStatusPopUp') await this.page.getByTestId('searchOrder-popup-close-button').click({ force: true })
-    if(button==='status') await this.statusButton.click({ force: true })
-    if(button==='createOrder') await this.createOrderButton.click()
-    if(button==='logOut') await this.logOutButton.click()
+    if (button === 'orderStatusPopUp')
+      await this.page.getByTestId('searchOrder-popup-close-button').click({ force: true })
+    if (button === 'status') await this.statusButton.click({ force: true })
+    if (button === 'createOrder') await this.createOrderButton.click()
+    if (button === 'logOut') await this.logOutButton.click()
   }
 }

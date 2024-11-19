@@ -34,6 +34,6 @@ export default class LoginPage {
   }
 
   public async clickButton(button: string): Promise<void> {
-    if(button==='signIn') await this.signInButton.click()
+    if (button === 'signIn') await this.signInButton.click()
   }
 }
