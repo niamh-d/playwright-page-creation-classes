@@ -25,6 +25,10 @@ test.describe('Login and Order Creation pages', () => {
       await authPage.signInButton.click()
       await expect.soft(authPage.authErrorMessage).toBeVisible()
     })
+
+    test('verify language container', async ({}) => {
+      await authPage.checkLanguageSelector()
+    })
   })
 
   test.describe('Order creation tests', () => {
@@ -54,6 +58,10 @@ test.describe('Login and Order Creation pages', () => {
     test('login and log out', async ({}) => {
       await orderCreationPage.clickButton('logOut')
       await expect.soft(authPage.signInButton).toBeEnabled()
+    })
+
+    test('verify privacy policy link', async ({}) => {
+      await orderCreationPage.checkPrivacyPolicyLink()
     })
   })
 })

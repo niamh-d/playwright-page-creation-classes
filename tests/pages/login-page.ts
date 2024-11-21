@@ -1,9 +1,9 @@
 import { Locator, Page } from '@playwright/test'
 import OrderPage from './order-page'
 import { SERVICE_URL } from '../../config/env-data'
+import BasePage from './base-page'
 
-export default class LoginPage {
-  readonly page: Page
+export default class LoginPage extends BasePage {
   readonly url: string = SERVICE_URL
   readonly signInButton: Locator
   readonly usernameField: Locator
@@ -11,7 +11,8 @@ export default class LoginPage {
   readonly authErrorMessage: Locator
 
   constructor(page: Page) {
-    this.page = page
+    super(page)
+
     this.signInButton = this.page.getByTestId('signIn-button')
     this.usernameField = this.page.getByTestId('username-input')
     this.passwordField = this.page.getByTestId('password-input')

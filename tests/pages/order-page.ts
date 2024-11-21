@@ -1,7 +1,7 @@
 import { Locator, Page } from '@playwright/test'
+import BasePage from './base-page'
 
-export default class OrderPage {
-  private page: Page
+export default class OrderPage extends BasePage {
   readonly statusButton: Locator
   readonly nameInput: Locator
   readonly phoneInput: Locator
@@ -12,7 +12,8 @@ export default class OrderPage {
   readonly logOutButton: Locator
 
   constructor(page: Page) {
-    this.page = page
+    super(page)
+
     this.statusButton = this.page.getByTestId('openStatusPopup-button')
     this.nameInput = this.page.getByTestId('username-input')
     this.commentInput = this.page.getByTestId('comment-input')
