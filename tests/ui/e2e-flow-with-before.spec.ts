@@ -29,6 +29,10 @@ test.describe('Login and Order Creation pages', () => {
     test('verify language container', async ({}) => {
       await authPage.checkLanguageSelector()
     })
+
+    test('verify footer on login page', async ({}) => {
+      await authPage.checkPrivacyPolicyLink()
+    })
   })
 
   test.describe('Order creation tests', () => {
@@ -47,12 +51,10 @@ test.describe('Login and Order Creation pages', () => {
     })
 
     test('login and create order', async ({}) => {
-      await orderCreationPage.nameInput.fill(faker.lorem.word(6))
-      await orderCreationPage.phoneInput.fill(faker.lorem.word(6))
-      await orderCreationPage.commentInput.fill(faker.lorem.word(20))
-      await orderCreationPage.clickButton('createOrder')
+      await orderCreationPage.createOrder()
       await expect.soft(orderCreationPage.orderCreationContainer).toBeVisible()
       await expect.soft(orderCreationPage.okPopUpButton).toBeVisible()
+      await orderCreationPage.clickButton('closeOk')
     })
 
     test('login and log out', async ({}) => {
@@ -62,6 +64,14 @@ test.describe('Login and Order Creation pages', () => {
 
     test('verify privacy policy link', async ({}) => {
       await orderCreationPage.checkPrivacyPolicyLink()
+      await expect
+        .soft(orderCreationPage.statusButton)
+        .toHaveCSS('background-color', 'rgb(253, 204, 0)')
+    })
+
+    test('check order exists', async ({}) => {
+      const foundOrderPage = await orderCreationPage.checkOrderStatus()
+      await expect.soft(foundOrderPage.orderOpenStatus).toBeVisible()
     })
   })
 })
